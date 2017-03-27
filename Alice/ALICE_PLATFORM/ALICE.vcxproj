@@ -228,6 +228,7 @@
       <StackReserveSize>8000000</StackReserveSize>
       <HeapReserveSize>
       </HeapReserveSize>
+      <AdditionalOptions> /FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Xdcmake>
       <DocumentLibraryDependencies>false</DocumentLibraryDependencies>
