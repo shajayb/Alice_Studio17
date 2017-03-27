@@ -19,7 +19,7 @@ using namespace std::experimental;
 
 void setup()
 {
-	newClass A = * new newClass();
+	
 }
 
 void update(int value)
