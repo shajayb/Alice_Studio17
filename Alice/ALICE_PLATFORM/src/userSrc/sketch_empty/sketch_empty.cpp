@@ -13,13 +13,12 @@ using namespace std::experimental;
 
 
 
-
 ///////// ----------------------------------------- model - view - controller (MVC) paradigm / pattern / template  ----------------- ////////////////////////////// 
 /////////////////////////// model  ///////////////////////////////////////////
 
 void setup()
 {
-	
+
 }
 
 void update(int value)
@@ -37,16 +36,9 @@ void draw()
 	backGround(0.75);
 	drawGrid(20);
 
-
 }
 
-
-
-
-
 /////////////////////////// control  ///////////////////////////////////////////
-
-
 void mousePress(int b, int state, int x, int y)
 {
 }
