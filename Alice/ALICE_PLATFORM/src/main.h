@@ -32,6 +32,8 @@ int counter = 0;
 string inFile = "";
 CONTROLLER CONTROLLERS;
 MODEL SCENE;
+SliderGroup S;
+ButtonGroup B;
 //------------------------------------------------------------------------------- CALLBACKS
 
 void updateCallBack( int value )
@@ -84,7 +86,8 @@ void drawCallBack()
 			SCENE.performWindowSelection(CONTROLLERS);
 			SCENE.draw();
 			CONTROLLERS.draw();
-
+			S.draw();
+			B.draw();
 		//////////////////////////////////////////////////////////////////////////
 
 		if (saveF)
@@ -180,6 +183,14 @@ void mousePressCallBack(int b,int s,int x,int y)
 
 	 CONTROLLERS.mousePress(b, s, x, y);
 
+	 // -------------------- move from here to controller
+	 if (GLUT_LEFT_BUTTON == b && GLUT_DOWN == s)
+	 {
+		 S.performSelection(x, y, HUDSelectOn);
+		 B.performSelection(x, y);
+	 }
+	 // --------------------
+
 	 mousePress( b, s, x, y) ;
 
 	 updateCam = (glutGetModifiers() == GLUT_ACTIVE_ALT) ? false : true;
@@ -190,6 +201,10 @@ void motionCallBack( int x, int y )
 {
 
 	CONTROLLERS.mouseMotion(x, y);
+	
+	// move from here to controller
+	S.performSelection(x, y, HUDSelectOn);
+	// --------------------
 
 	mouseMotion(x,y);
 	if(!HUDSelectOn && updateCam)Motion( x, y) ;
@@ -232,6 +247,11 @@ int main(int argc,char** argv)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_POINT_SMOOTH);
 
+	//////////////////////////////////////////////////////////////////////////
+	S = *new SliderGroup();
+	B = *new ButtonGroup(vec(50, 500, 0));
+
+	//////////////////////////////////////////////////////////////////////////
 
 	setup();
 	glutMainLoop();

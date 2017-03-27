@@ -4,7 +4,7 @@
 
 #include "ALICE_DLL.h"
 #include "utilities.h"
-#include "object.h"
+//#include "object.h"
 #include "Controller.h"
 
 class OBJECT
