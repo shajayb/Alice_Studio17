@@ -8,6 +8,7 @@
 #include <memory>
 #include<time.h>
 #include<experimental/generator> 
+
 using namespace std;
 using namespace std::experimental;
 
@@ -16,9 +17,44 @@ using namespace std::experimental;
 ///////// ----------------------------------------- model - view - controller (MVC) paradigm / pattern / template  ----------------- ////////////////////////////// 
 /////////////////////////// model  ///////////////////////////////////////////
 
+
+int maxLines = 1000;
+vector<vec> pts; // storage container (vector) to store the vectors (points);
+
+
 void setup()
 {
+	// open the appropriate file for reading
+	std::fstream fs("data/pts.txt", ios::in);
 
+	// set initial number of lines to 0;
+	int numLines = 0;
+	
+	// while the file has content left to be read (i.e. the end of file has NOT been reached ), repeatedly perform these actions
+	/*
+	1. get the current line from the open file
+	2. convert contents of the line into coordinates and then to a point
+	3. store point in pts container
+	*/
+	while (!fs.eof() && numLines < maxLines ) // the second condition is a safety check, in case the file is corrupt
+	{
+		char str[2000]; // a storage container to store characters
+		fs.getline(str, 2000); // get the current line from the open file, store contents of line in str (character array);
+		vector<string> content = splitString(str, ","); // collect characters into strings, by looking for comma separators in the character array;
+		
+			if (content.size() != 3)continue; // if the number of strings is not equal 3, skip and go to next line
+		
+		float x = atof( content[0].c_str() ); // convert the first string into characters (.c_str()), then convert character to float (atof);
+		float y = atof( content[1].c_str() );// convert the second string into characters (.c_str()), then convert character to float (atof);
+		float z = atof( content[2].c_str() );// convert the thrid string into characters (.c_str()), then convert character to float (atof);
+
+		vec curPt = vec(x,y,z); // create a point(vector) from floats;
+		pts.push_back(curPt); // push back the Point into the storage container (vector - pts)
+
+		numLines++; // increment the counter keeping track of number of lines.
+	}
+
+	fs.close(); // close file;
 }
 
 void update(int value)
@@ -30,12 +66,37 @@ void update(int value)
 void draw()
 {
 
-	double ht = 350;
-	double ht_plus = 20;
 
 	backGround(0.75);
 	drawGrid(20);
 
+
+	///----- drawLines
+	glLineWidth(3);
+	glColor3f(0, 0, 0);
+	lineStyle(3);
+
+		int n = pts.size();
+		for (int i = 0; i < n; i++)
+		{
+			int next = (i + 1) % n; // a formula to get the next number to the current in a cyclical way : i.e next of 1 = 2, next of last point = 0;
+									// % is the modulo operation, and returns thee remainder when the numerator( i+1) is divided by n;
+								    // thus when i + 1 == n, the remainder is 0;
+			drawLine(pts[i], pts[next]); // draw line between current point and next point;
+		}
+
+
+	glLineWidth(1);
+	lineStyle(0);
+
+	///----- drawPoints
+
+	glPointSize(15);
+	glColor3f(1, 0, 0);
+	for (int i = 0; i < n; i++)drawPoint(pts[i]);
+
+	glPointSize(1);
+	glColor3f(1, 1, 1);
 }
 
 /////////////////////////// control  ///////////////////////////////////////////
