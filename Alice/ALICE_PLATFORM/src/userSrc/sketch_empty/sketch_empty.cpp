@@ -110,6 +110,40 @@ void mouseMotion(int x, int y)
 
 void keyPress(unsigned char k, int xm, int ym)
 {
+
+	// when 'w' is pressed,  output the contents of the pts vector into a text file
+	if (k == 'w')
+	{
+		// construct outputFile object
+		ofstream outputFileName;
+		char outStr[600]; // character array
+
+		//- create a file called out.txt in the data folder  
+		outputFileName.open( "data/out.txt", ios::out);
+
+		// check if file was created, else report an error
+			if ( outputFileName.fail() )cout << " error in creating file : data/out.txt " << endl;
+
+		// iterate through the points of pts vector, write the coordinates into the open file
+		for (int i = 0; i < pts.size(); i++)
+		{
+			vec pt = pts[i]; // get current point in vector
+
+			// format the output string, separated by commas, and plugging in coordinates ;
+			sprintf(outStr, " %1.2f,%1.2f,%1.2f", pt.x,pt.y,pt.z ); /* see fo details http://www.cplusplus.com/reference/cstdio/sprintf/ */
+			
+			// output (stream) the formatted string into the open file.
+			outputFileName << outStr << endl;
+		}
+
+		// close the file
+		outputFileName.close();
+		
+		// report success
+		cout << " exporting points / writing file : DONE " << endl;
+	}
+	
+
 }
 
 
