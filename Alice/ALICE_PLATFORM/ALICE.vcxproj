@@ -27,7 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\userSrc\sketch_empty\sketch_empty.cpp" />
+    <ClCompile Include="src\userSrc\sketch_ReadWriteTextFiles\sketch_ReadWriteTextFiles.cpp" />
+    <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning.cpp" />
+    <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning_multiThreading.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{523591A1-85D6-4C6F-9283-4989B0011977}</ProjectGuid>

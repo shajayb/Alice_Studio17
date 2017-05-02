@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\userSrc\sketch_empty\sketch_empty.cpp" />
+    <ClCompile Include="src\userSrc\sketch_ReadWriteTextFiles\sketch_ReadWriteTextFiles.cpp" />
+    <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning_multiThreading.cpp" />
+    <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning.cpp" />
   </ItemGroup>
 </Project>
