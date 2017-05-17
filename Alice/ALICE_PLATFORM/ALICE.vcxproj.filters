@@ -4,5 +4,6 @@
     <ClCompile Include="src\userSrc\sketch_ReadWriteTextFiles\sketch_ReadWriteTextFiles.cpp" />
     <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning_multiThreading.cpp" />
     <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning.cpp" />
+    <ClCompile Include="src\userSrc\sketch_mesh\sketch_mesh.cpp" />
   </ItemGroup>
 </Project>
