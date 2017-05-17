@@ -27,10 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\userSrc\sketch_mesh\sketch_mesh.cpp" />
-    <ClCompile Include="src\userSrc\sketch_ReadWriteTextFiles\sketch_ReadWriteTextFiles.cpp" />
-    <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning.cpp" />
-    <ClCompile Include="src\userSrc\sketch_spatialBinning\sketch_spatialBinning_multiThreading.cpp" />
+    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_hellowWorld.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{523591A1-85D6-4C6F-9283-4989B0011977}</ProjectGuid>
