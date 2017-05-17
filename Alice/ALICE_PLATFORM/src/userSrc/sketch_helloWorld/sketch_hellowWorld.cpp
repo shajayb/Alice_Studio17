@@ -21,7 +21,8 @@ using namespace std::experimental;
 void setup()
 {
 
-	cout << "HELLO UBIK" << endl;
+	cout << "HELLO " << endl;
+	cout << "UBIK " << endl;
 }
 
 void update(int value)
