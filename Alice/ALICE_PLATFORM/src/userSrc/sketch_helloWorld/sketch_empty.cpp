@@ -66,7 +66,7 @@ dot allDots[10000]; // 1000 empty dots, with inital position at 0,0,0
 
 void setup()
 {
-	for (int i = 0; i < 10000; i++)allDots[i].position = vec(ofRandom(-10, 10), ofRandom(-10, 10), 0);
+	for (int i = 0; i < 10000; i++)allDots[i].position = vec(ofRandom(-10, 10), ofRandom(-10, 10), ofRandom(-10, 10)).normalise();
 
 }
 
