@@ -2,5 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_hellowWorld.cpp" />
+    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_circle.cpp" />
+    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_empty.cpp" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-#define _MAIN_
+
 
 #ifdef _MAIN_
 
@@ -30,8 +30,8 @@ void setup()
 		
 		// calculate the angle parameter of the point, in radians
 
-		float anglebetweemPoints = 360.0 / 100; // in degrees
-		float angleofCurrentPoint =  anglebetweemPoints * i;// in degrees
+		float anglebetweenPoints = 360.0 / 100; // in degrees
+		float angleofCurrentPoint = anglebetweenPoints * i;// in degrees
 		float angleInRadians = angleofCurrentPoint * DEG_TO_RAD; // convert degrees to radians
 
 		// calculate x coordinate : r * sin(angle)
