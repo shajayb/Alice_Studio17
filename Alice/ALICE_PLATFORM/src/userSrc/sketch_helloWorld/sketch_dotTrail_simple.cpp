@@ -16,65 +16,88 @@ using namespace std::experimental;
 
 ///////// ----------------------------------------- model - view - controller (MVC) paradigm / pattern / template  ----------------- ////////////////////////////// 
 /////////////////////////// model  ///////////////////////////////////////////
+
 class dot
 {
 public:
-	//class property
-	vec A;
-
-
-	//class methods / actions
-	void display()
+	//class properties
+	vec position;
+	vec velocity;
+	
+	vec previousPositions[50];
+	int counter = 0;
+	//class methods
+	void move()
 	{
-		glPointSize(5);
-			drawPoint(A);
-		glPointSize(1);
+
+		velocity.x = ofRandom(-1.1, 1.1);
+		velocity.y = ofRandom(-1.1, 1.1);
+		velocity.z = ofRandom(-1.1, 1.1);
+
+		position = position + velocity;
+		
+		//store current location in previousPositions array
+		previousPositions[ counter ] = position;
+		
+		//increase counter 
+		counter = counter + 1;
+
+		//check if counter > 50, then reset counter to 0 ;
+		if (counter >= 50)
+		{
+			counter = 0;
+		}
 	}
 
+	void display()
+	{
+		//draw current location
+		glPointSize(5);
+			drawPoint(position);
+		glPointSize(1);
+
+		//draw velocity direction as a line
+		vec B = position + velocity ;
+		drawLine(position, B);
+
+		//draw previous locations 
+		for (int i = 0; i < 50; i++)
+		{
+			drawPoint( previousPositions[i] );
+		}
+	}
 };
 
 
-vec A; // put a point into model
-vec allPts[50]; // put 50 points into model
 
-dot C; // put a dot into model
-dot allDots[50];// put 50 dots into model
+dot C;
+dot allDots[50];
 
 void setup()
 {
-
-	
-	////////////////////////////////////////////////////////////////////////// points
-
-
-	A = vec(10, 0, 0); // initialise a point
-
-	//initalise 50 points
-	for (int i = 0; i < 50; i++)
-	{
-		allPts[i] = vec(ofRandom(-10, 10), ofRandom(-10, 10), 0);
-	}
-
-	////////////////////////////////////////////////////////////////////////// dots
-	
-
-	//initialise a dot
+	//initialise
 	C = dot();
+	C.position = vec(10, 10, 0);
 
-	//initialise 50 dots 
-
+	//initialise
 	for (int i = 0; i < 50; i++)
 	{
 		allDots[i] = dot();
+		allDots[i].position = vec( ofRandom(-10,10), ofRandom(-10, 10), 0);
 	}
-
-
 }
 
 void update(int value)
 {
+	//update
+	//object.method()
+	C.move();
 
-	
+	//update
+	for (int i = 0; i < 50; i++)
+	{
+		allDots[i].move();
+	}
 }
 
 /////////////////////////// view  ///////////////////////////////////////////
@@ -86,35 +109,18 @@ void draw()
 	backGround(0.75);
 	drawGrid(20);
 	
-	////////////////////////////////////////////////////////////////////////// points 
-	glColor3f(1, 0, 0);
-
-	glPointSize(5);
-
-	drawPoint(A); // draw point A
-	//draw 50 points 
-
-	for (int i = 0; i < 50; i++)
-	{
-		drawPoint(allPts[i]);
-	}
-
-	////////////////////////////////////////////////////////////////////////// dots
-	glColor3f(1, 1, 1);
-
-	// draw dot B
+	//draw
 	C.display();
 
-
-	//draw 50 dots;
+	//draw
 	for (int i = 0; i < 50; i++)
 	{
 		allDots[i].display();
 	}
-
 }
 
 /////////////////////////// control  ///////////////////////////////////////////
+
 void mousePress(int b, int state, int x, int y)
 {
 
