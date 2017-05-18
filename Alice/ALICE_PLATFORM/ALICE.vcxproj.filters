@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_hellowWorld.cpp" />
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_circle.cpp" />
+    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_dottrail.cpp" />
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_empty.cpp" />
   </ItemGroup>
 </Project>
