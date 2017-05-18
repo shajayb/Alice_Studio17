@@ -1,4 +1,4 @@
-#define _MAIN_
+
 
 #ifdef _MAIN_
 
@@ -24,7 +24,7 @@ public:
 	vec position;
 	vec velocity;
 	
-	vec previousPositions[50];
+	vec previousPositions[500];
 	int counter = 0;
 	//class methods
 	void move()
@@ -34,7 +34,7 @@ public:
 		velocity.y = ofRandom(-1.1, 1.1);
 		velocity.z = ofRandom(-1.1, 1.1);
 
-		position = position + velocity;
+		position = position + velocity * 0.1;
 		
 		//store current location in previousPositions array
 		previousPositions[ counter ] = position;
@@ -43,7 +43,7 @@ public:
 		counter = counter + 1;
 
 		//check if counter > 50, then reset counter to 0 ;
-		if (counter >= 50)
+		if (counter >= 500)
 		{
 			counter = 0;
 		}
@@ -52,6 +52,7 @@ public:
 	void display()
 	{
 		//draw current location
+		glColor3f(1, 0, 0);
 		glPointSize(5);
 			drawPoint(position);
 		glPointSize(1);
@@ -61,14 +62,13 @@ public:
 		drawLine(position, B);
 
 		//draw previous locations 
-		for (int i = 0; i < 50; i++)
+		glColor3f(1, 1, 1);
+		for (int i = 0; i < 500-1; i++)
 		{
 			drawPoint( previousPositions[i] );
 		}
 	}
 };
-
-
 
 dot C;
 dot allDots[50];
