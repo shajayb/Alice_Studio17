@@ -5,6 +5,6 @@
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_dottrail.cpp" />
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_dotTrail_simple.cpp" />
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_helloWorld.cpp" />
-    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_distanceChecking.cpp" />
+    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_distanceCheckingAndMove.cpp" />
   </ItemGroup>
 </Project>

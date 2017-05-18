@@ -26,7 +26,8 @@ void setup()
 {
 	for (int i = 0; i < 100; i++)
 	{
-		pts[i] = vec(ofRandom(-10, 10), ofRandom(-10, 10), ofRandom(-10, 10));
+		pts[i] =  vec(ofRandom(-10, 10), ofRandom(-10, 10), ofRandom(-10, 10));
+		//vec(5.0 * sin(2 * PI*i * 1 / 100), 5.0 * cos(2 * PI*i * 1 / 100), 0);//
 	}
 }
 
@@ -54,29 +55,42 @@ void draw()
 	}
 
 	glColor3f(1, 0, 0);
-	float minimumdistance = 10000000;
-	int idOfNearestPoint;
-	vec A = pts[5];
-	
-	for (int i = 0; i < 100; i++)
-	{
-		if (i == 5)continue;
 
-		vec B = pts[i];
-		vec C = B - A;
-		float distance = C.mag();
+	// nested for loop
+	//  for each point check distance to every other point ;
+	for (int j = 0; j < 100; j++)
+	{
 		
-		if (distance < minimumdistance)
+		vec A = pts[j];
+		float minimumdistance = 10000000;
+		int idOfNearestPoint = j;
+
+		for (int i = 0; i < 100; i++)
 		{
-			minimumdistance = distance;
-			idOfNearestPoint = i;
+			if (i == j)continue;
+
+			vec B = pts[i];
+			vec C = B - A;
+			float distance = C.mag();
+
+			if (distance < minimumdistance  && B.z < A.z  )
+			{
+				minimumdistance = distance;
+				idOfNearestPoint = i;
+			}
 		}
+
+		glColor3f(1, 0, 0);
+		drawCircle(A, 0.3, 32);
+		vec nearestPoint = pts[idOfNearestPoint];
+		drawLine(A, nearestPoint);
+
+
+		vec C = nearestPoint - A;
+		A += C * 0.01;
+		pts[j] = A;
 	}
 
-	glColor3f(1, 0, 0);
-	drawCircle(A, 0.3, 32);
-	vec nearestPoint = pts[idOfNearestPoint];
-	drawLine(A, nearestPoint);
 
 	glPointSize(1);
 }
