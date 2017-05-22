@@ -30,7 +30,7 @@
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_circle.cpp" />
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_dottrail.cpp" />
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_dotTrail_simple.cpp" />
-    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_distanceCheckingAndMove.cpp" />
+    <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_circleClass.cpp" />
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_helloWorld.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
