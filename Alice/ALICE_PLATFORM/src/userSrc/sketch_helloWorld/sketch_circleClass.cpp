@@ -21,13 +21,15 @@ using namespace std::experimental;
 // idea : make 100 points, make them move towards nearest neighbor ;
 
 
+
 class circle
 {
 public:
 	vec cen;
 	vec pts[100];
-	bool interescting[100];
+	bool detectedOrNot[100];
 
+	///////// setup methods 
 	void initialisePoints() // out points on a circle 
 	{
 		for (int i = 0; i < 100; i++)
@@ -41,10 +43,12 @@ public:
 			pts[i] = pts[i] + cen; // move points relative to the location of the center
 		}
 	}
+	
+	///////// update methods 
 
 	void reset()
 	{
-		for (int i = 0; i < 100; i++)interescting[i] = false;
+		for (int i = 0; i < 100; i++)detectedOrNot[i] = false;
 	}
 	void detect(circle &other)
 	{
@@ -55,22 +59,22 @@ public:
 			{
 				if (pts[i].distanceTo(other.pts[j]) < .5)
 				{
-					interescting[i] = true;
+					detectedOrNot[i] = true;
 					break;
 				}
 			}
 		}
 	}
-
 	void expand()
 	{
 		for (int i = 0; i < 100; i++)
 		{
-			if (!interescting[i])
+			if (!detectedOrNot[i])
 				pts[i] += (pts[i] - cen).normalise() * 0.1;
 		}
 	}
 
+	///////// display methods 
 	void display() // display the center and display the points 
 	{
 		drawPoint(cen);
@@ -79,13 +83,26 @@ public:
 			drawPoint(pts[i]);
 		}
 	}
+
+	///////// export methods
+
+
 };
+
+
+
+///////////////////////////////////////////////////////////// MAIN PROGRAM /////////////////////////////////////////////////////////////
 
 
 circle allCircles[5];
 
+
+
 void setup()
 {
+
+	B1.min = vec(0, 0, 0);
+	B1.max = vec(10, 10, 0);
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -118,6 +135,8 @@ void update(int value)
 	{
 		allCircles[i].expand();
 	}
+
+	B1.rotate();
 }
 
 /////////////////////////// view  ///////////////////////////////////////////
@@ -132,6 +151,8 @@ void draw()
 	glPointSize(5);
 	for (int i = 0; i < 5; i++)allCircles[i].display();
 	glPointSize(1);
+
+	B1.display();
 }
 
 /////////////////////////// control  ///////////////////////////////////////////
