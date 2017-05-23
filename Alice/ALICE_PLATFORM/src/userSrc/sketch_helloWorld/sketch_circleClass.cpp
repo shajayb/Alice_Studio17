@@ -101,8 +101,7 @@ circle allCircles[5];
 void setup()
 {
 
-	B1.min = vec(0, 0, 0);
-	B1.max = vec(10, 10, 0);
+
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -136,7 +135,7 @@ void update(int value)
 		allCircles[i].expand();
 	}
 
-	B1.rotate();
+
 }
 
 /////////////////////////// view  ///////////////////////////////////////////
@@ -152,7 +151,6 @@ void draw()
 	for (int i = 0; i < 5; i++)allCircles[i].display();
 	glPointSize(1);
 
-	B1.display();
 }
 
 /////////////////////////// control  ///////////////////////////////////////////
