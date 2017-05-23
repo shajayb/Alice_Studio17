@@ -19,46 +19,97 @@ using namespace std::experimental;
 ///////// ----------------------------------------- model - view - controller (MVC) paradigm / pattern / template  ----------------- ////////////////////////////// 
 /////////////////////////// model  ///////////////////////////////////////////
 // idea : make 100 points, make them move towards nearest neighbor ;
+
 class circle
 {
 public:
+
 	vec cen;
-	vec pts[100];
+	float radius;
+	vec pts[20];
+	bool detectedOrNot[20];
 
-	void initialisePoints() // out points on a circle 
+	void initialisePoints()
 	{
-		for (int i = 0; i < 100; i++)
+		radius = 1.0;
+		for (int i = 0; i < 20; i++)
 		{
+			if (detectedOrNot[i] == true)
+			{
+				continue;
+			}
+			
 			pts[i] = vec(
-							1.0 * sin(2 * PI * 1 / 100 * i), // x coordinate
-							1.0 * cos(2 * PI * 1 / 100 * i), // y coordinate
-							0 // z coordinate
-						);
+					1.0 * sin(2 * PI * 1 / 20.0 * i), 
+					1.0 * cos(2 * PI * 1 / 20.0 * i), 
+					0);
 
-			pts[i] = pts[i] + cen; // move points relative to the location of the center
+			pts[i] += cen;
 		}
 	}
-	
-	void display() // display the center and display the points 
+
+	// detect points of the other circle
+	// that are near this circle
+	void detect( circle &otherCircle )
+	{
+		for (int i = 0; i < 20; i++) // looping through all 20 of my points
+		{
+			// looping through all 20 of the points of other circle
+			for (int j = 0; j < 20; j++)
+			{
+				float distance = pts[i].distanceTo( otherCircle.pts[j] );
+				//calculate distance between
+				// Point i of my circle with point j of the other circle
+				// and store the distance in a variable called distance
+				if (distance < 1.0 )
+				{
+					detectedOrNot[i] = true;
+					break;
+				}
+				else
+				{
+					detectedOrNot[i] = false;
+				}
+			}
+		}
+
+	}
+
+	void move()
+	{
+		cen += vec(0.1, 0.1, 0);
+	}
+
+	void display()
 	{
 		drawPoint(cen);
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 20; i++)
 		{
+			if (detectedOrNot[i] == true)
+			{
+				glColor3f(1, 0, 0);
+			}
+			else
+			{
+				glColor3f(1, 1, 1);
+			}
+
 			drawPoint(pts[i]);
 		}
 	}
+
 };
 
-
-circle cir;
+circle cir1;
 circle cir2;
 
 void setup()
 {
-	cir.cen = vec(5, 5, 0);
-	cir.initialisePoints();
+	
+	cir1.cen = vec(5, 5, 0);
+	cir1.initialisePoints();
 
-	cir2.cen = vec(15, 5, 0);
+	cir2.cen = vec(10, 10, 0);
 	cir2.initialisePoints();
 }
 
@@ -66,6 +117,8 @@ void setup()
 void update(int value)
 {
 	
+	cir1.move(); // move the center
+	cir1.initialisePoints(); // draw points at origin and move to new center
 
 }
 
@@ -79,8 +132,11 @@ void draw()
 	drawGrid(20);
 
 	glPointSize(5);
-	cir.display();
-	cir2.display();
+		cir1.display();	
+		cir2.display();
+
+		cir1.detect(cir2);
+
 
 	glPointSize(1);
 }
