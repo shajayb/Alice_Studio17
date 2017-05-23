@@ -34,11 +34,6 @@ public:
 		radius = 1.0;
 		for (int i = 0; i < 20; i++)
 		{
-			if (detectedOrNot[i] == true)
-			{
-				continue;
-			}
-			
 			pts[i] = vec(
 					1.0 * sin(2 * PI * 1 / 20.0 * i), 
 					1.0 * cos(2 * PI * 1 / 20.0 * i), 
@@ -48,8 +43,6 @@ public:
 		}
 	}
 
-	// detect points of the other circle
-	// that are near this circle
 	void detect( circle &otherCircle )
 	{
 		for (int i = 0; i < 20; i++) // looping through all 20 of my points
@@ -80,6 +73,18 @@ public:
 		cen += vec(0.1, 0.1, 0);
 	}
 
+	void expand()
+	{
+		for (int i = 0; i < 20; i++)
+		{
+			if (detectedOrNot[i] == false)
+			{
+				pts[i] += (pts[i] - cen).normalise() * 0.1;
+			}
+			
+		}
+	}
+
 	void display()
 	{
 		drawPoint(cen);
@@ -105,7 +110,7 @@ circle cir2;
 
 void setup()
 {
-	
+
 	cir1.cen = vec(5, 5, 0);
 	cir1.initialisePoints();
 
@@ -117,9 +122,11 @@ void setup()
 void update(int value)
 {
 	
-	cir1.move(); // move the center
-	cir1.initialisePoints(); // draw points at origin and move to new center
+	cir1.detect(cir2);
+	cir1.expand();
 
+	cir2.detect(cir1);
+	cir2.expand();
 }
 
 /////////////////////////// view  ///////////////////////////////////////////
@@ -134,10 +141,6 @@ void draw()
 	glPointSize(5);
 		cir1.display();	
 		cir2.display();
-
-		cir1.detect(cir2);
-
-
 	glPointSize(1);
 }
 
