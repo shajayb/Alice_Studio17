@@ -19,8 +19,6 @@ using namespace std::experimental;
 ///////// ----------------------------------------- model - view - controller (MVC) paradigm / pattern / template  ----------------- ////////////////////////////// 
 /////////////////////////// model  ///////////////////////////////////////////
 // idea : make 100 points, make them move towards nearest neighbor ;
-
-
 class circle
 {
 public:
@@ -33,20 +31,20 @@ public:
 		for (int i = 0; i < 100; i++)
 		{
 			pts[i] = vec(
-				1.0 * sin(2 * PI * 1 / 100 * i), // x coordinate
-				1.0 * cos(2 * PI * 1 / 100 * i), // y coordinate
-				0 // z coordinate
-			);
+							1.0 * sin(2 * PI * 1 / 100 * i), // x coordinate
+							1.0 * cos(2 * PI * 1 / 100 * i), // y coordinate
+							0 // z coordinate
+						);
 
 			pts[i] = pts[i] + cen; // move points relative to the location of the center
 		}
 	}
-
+	
 	void reset()
 	{
 		for (int i = 0; i < 100; i++)interescting[i] = false;
 	}
-	void detect(circle &other)
+	void checkIfIntersecting( circle &other)
 	{
 		for (int i = 0; i < 100; i++)
 		{
@@ -62,12 +60,12 @@ public:
 		}
 	}
 
-	void expand()
+	void moveOutward()
 	{
 		for (int i = 0; i < 100; i++)
 		{
-			if (!interescting[i])
-				pts[i] += (pts[i] - cen).normalise() * 0.1;
+			if( ! interescting[i])
+			pts[i] += (pts[i] - cen).normalise() * 0.1;
 		}
 	}
 
@@ -82,42 +80,45 @@ public:
 };
 
 
-circle allCircles[5];
+circle circles[5];
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
 
 void setup()
 {
+	
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 5 ; i++)
 	{
-		allCircles[i].cen = vec(5 * i, 0, 0);
-		allCircles[i].initialisePoints();
+		circles[i].cen = vec( ofRandom(-5,5), ofRandom(-5, 5), 0);
+		circles[i].initialisePoints();
 	}
-
 }
 
 
 void update(int value)
 {
-
 	for (int i = 0; i < 5; i++)
 	{
-		allCircles[i].reset();
+		circles[i].reset();
 	}
 
 	for (int i = 0; i < 5; i++)
-	{
 		for (int j = 0; j < 5; j++)
 		{
 			if (i == j)continue;
-
-			allCircles[i].detect(allCircles[j]);
+			circles[i].checkIfIntersecting(circles[j]);
 		}
-	}
 
 	for (int i = 0; i < 5; i++)
 	{
-		allCircles[i].expand();
+		circles[i].moveOutward();
 	}
+
+
 }
 
 /////////////////////////// view  ///////////////////////////////////////////
@@ -130,7 +131,12 @@ void draw()
 	drawGrid(20);
 
 	glPointSize(5);
-	for (int i = 0; i < 5; i++)allCircles[i].display();
+
+	for (int i = 0; i < 5; i++)
+	{
+		circles[i].display();
+	}
+
 	glPointSize(1);
 }
 
@@ -146,7 +152,7 @@ void mouseMotion(int x, int y)
 void keyPress(unsigned char k, int xm, int ym)
 {
 
-
+	
 
 
 }
