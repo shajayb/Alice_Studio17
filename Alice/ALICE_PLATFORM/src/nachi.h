@@ -47,22 +47,6 @@ public:
 		//invertTCP_toLocalOrigin();
 	}
 
-	void invertTCP_toLocalOrigin()
-	{
-		//
-		vec cen = (M.positions[5] + M.positions[1]) * 0.5;
-		vec xAxis = M.positions[5] - M.positions[3];
-		vec yAxis = M.positions[1] - M.positions[3];
-		vec zAxis = xAxis.cross(yAxis);
-		Matrix4 T;
-		T.setColumn(0, xAxis.normalise() * -1);
-		T.setColumn(1, yAxis.normalise() * 1);
-		T.setColumn(2, zAxis.normalise()* -1);
-		T.setColumn(3, cen);
-		T.invert();
-
-		for (int i = 0; i < M.n_v; i++)M.positions[i] = T * M.positions[i];
-	}
 
 	void invertMeshToLocal()
 	{
@@ -246,7 +230,7 @@ public:
 
 			//tcp.x += 5.0;
 			tcp.z += inc;
-			addPoint(tcp);
+			addPoint(tcp , tcp_x , tcp_y, tcp_z );
 		}
 
 		fs.close();
@@ -276,6 +260,7 @@ public:
 		tcp_y = vec(0, 1, 0);
 		tcp_z = vec(0, 0, -1);
 	}
+
 	void getBoundingBox()
 	{
 		min = vec(pow(10, 10), pow(10, 10), pow(10, 10));
@@ -332,56 +317,7 @@ public:
 		return _TOOL;
 	}
 	
-	//void changeTool(Matrix4 EE, Matrix4 &TOOL, int n)
-	//{
-	//	vec x = E_disp.XA;
-	//	vec y = E_disp.YA;
-	//	vec z = E_disp.ZA;
-	//	vec cen = E_disp.cen;
-
-	//	vec xf = E_disp.XA_f;
-	//	vec yf = E_disp.YA_f;
-	//	vec zf = E_disp.ZA_f;
-	//	vec cenf = E_disp.cen_f;
-
-
-	//	////  ------------------ ivnert to origin ;
-
-	//	Matrix3 trans = E_disp.rot;
-	//	trans.transpose();
-
-	//	x = trans * x; y = trans * y; z = trans * z;
-	//	xf = trans * xf; yf = trans * yf; zf = trans * zf;
-
-	//	Matrix4 T;
-	//	T.identity();
-	//	T.setColumn(3, cen);
-	//	T.invert();
-	//	cenf = T * cenf;
-	//	cen = T * cen;
-	//	cenf = cen + z.normalise() * 20.85; // strange addition 
-
-
-	//	// -------------- forward to tool location
-	//	trans.setColumn(0, EE.getColumn(0).normalise());
-	//	trans.setColumn(1, EE.getColumn(1).normalise());
-	//	trans.setColumn(2, EE.getColumn(2).normalise());
-
-	//	x = trans * x; y = trans * y; z = trans * z;
-	//	xf = trans * xf; yf = trans * yf; zf = trans * zf;
-
-	//	T.identity();
-	//	T.setColumn(3, EE.getColumn(3));
-	//	//cenf += EE.getColumn(3);
-	//	cen += EE.getColumn(3);
-	//	cenf = cen - z.normalise() * 20.85;
-
-	//	TOOL.setColumn(0, xf.normalise());
-	//	TOOL.setColumn(1, yf.normalise());
-	//	TOOL.setColumn(2, zf.normalise());
-	//	TOOL.setColumn(3, cenf);
-	//}
-
+	
 	void changeTool(Matrix4 EE, Matrix4 &TOOL, int n)
 	{
 		Matrix4 Tooltip, J5;
@@ -400,19 +336,19 @@ public:
 		Matrix4 invertJ5andToolTip;
 		invertJ5andToolTip = Tooltip;
 
-		////
+		//// tooltip = parent, invert both frames s.t tootip is at origin;
 
 		invertJ5andToolTip.invert();
 
 		transformFrame(invertJ5andToolTip, Tooltip);
 		transformFrame(invertJ5andToolTip, J5);
 
-		//////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////// foorward trasnform s.t tooltip is at required EE location. ;
 
-		transformFrame(EE, Tooltip);
+		transformFrame(EE, Tooltip);// this doesn't matter.. 
 		transformFrame(EE, J5);
 
-		TOOL = J5;
+		TOOL = J5; // TOOL is the frame that is sent to the IK solver;
 		
 	}
 	void goToNextPoint()
