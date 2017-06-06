@@ -7,7 +7,18 @@
 #include "ALICE_ROBOT_DLL.h"
 using namespace ROBOTICS;
 
-#include "graph.h"
+//#include "graph.h"
+
+void transformFrame(Matrix4 &trans, Matrix4 &frame)
+{
+	Matrix3 rot;
+	for (int i = 0; i < 3; i++)rot.setColumn(i, trans.getColumn(i));
+
+	frame.setColumn(3, trans * frame.getColumn(3));
+
+	for (int i = 0; i < 3; i++)
+		frame.setColumn(i, rot * frame.getColumn(i));
+}
 
 class EndEffector
 {
@@ -55,7 +66,7 @@ public:
 
 	void invertMeshToLocal()
 	{
-		Nachi_tester.ForwardKineMatics(Nachi_tester.rot);
+		Nachi_tester.ForwardKineMatics(Nachi_tester.rot); // this assumes Nachi_tester.rot is at home rotations;
 
 		transformMatrix = Nachi_tester.Bars_to_world_matrices[5];
 
@@ -76,7 +87,7 @@ public:
 		ZA.normalise();
 
 		rot.setColumn(0, XA); rotf.setColumn(0, XA_f);
-		rot.setColumn(1, YA);  rotf.setColumn(1, YA_f);
+		rot.setColumn(1, YA); rotf.setColumn(1, YA_f);
 		rot.setColumn(2, ZA); rotf.setColumn(2, ZA_f);
 	}
 
@@ -95,7 +106,7 @@ public:
 	void draw()
 	{
 		//Nachi_tester.draw();
-		M.draw(true);
+		M.draw(false);
 		//int i = 1 + 4 ;
 		//char c[200];
 		//sprintf(c, "%i ", i);
@@ -143,13 +154,13 @@ public:
 		drawString(s, M.positions[i]);
 
 
-		glColor3f(1, 0, 0); drawLine(cen, cen + XA);
-		glColor3f(0, 1, 0); drawLine(cen, cen + YA);
-		glColor3f(0, 0, 1); drawLine(cen, cen + ZA);
+		glColor3f(1, 0, 0); drawLine(cen, cen + XA * 3);
+		glColor3f(0, 1, 0); drawLine(cen, cen + YA * 3);
+		glColor3f(0, 0, 1); drawLine(cen, cen + ZA * 3);
 
-		glColor3f(1, 0, 0); drawLine(cen_f, cen_f + XA_f);
-		glColor3f(0, 1, 0); drawLine(cen_f, cen_f + YA_f);
-		glColor3f(0, 0, 1); drawLine(cen_f, cen_f + ZA_f);
+		glColor3f(1, 0, 0); drawLine(cen_f, cen_f + XA_f * 3);
+		glColor3f(0, 1, 0); drawLine(cen_f, cen_f + YA_f * 3);
+		glColor3f(0, 0, 1); drawLine(cen_f, cen_f + ZA_f * 3);
 
 	}
 };
@@ -179,7 +190,10 @@ public:
 	Robot_Symmetric Nachi_tester;
 	EndEffector E;
 	EndEffector E_disp;
-	Graph taskGraph;
+
+	#ifdef ifdef _GRAPH_
+		Graph taskGraph;
+	#endif // ifdef _GRAPH_
 
 	////////////////////////////////////////////////////////////////////////// CLASS METHODS 
 
@@ -195,8 +209,12 @@ public:
 		for (int i = 0; i < E.M.n_v; i++)E.M.positions[i] = EE * E.M.positions[i];// to tcip
 
 		actualPathLength = 0;
+
+#ifdef _GRAPH_
 		taskGraph = *new Graph();
 		taskGraph.reset();
+#endif // _GRAPH_
+
 	}
 	void readPath(string fileToRead = "data/path.txt", string delimiter = ",", float inc = 0)
 	{
@@ -240,7 +258,9 @@ public:
 		getBoundingBox();
 
 		//	checkReach();
+#ifdef _GRAPH_
 		copyPathToGraph();
+#endif // _GRAPH_
 
 	}
 	////////////////////////////////////////////////////////////////////////// UTILITY METHODS
@@ -289,6 +309,7 @@ public:
 		actualPathLength++;
 		if (actualPathLength > maxPts)actualPathLength = 0;
 	}
+#ifdef ifdef _GRAPH_
 	void copyPathToGraph()
 	{
 		for (int i = 0; i < actualPathLength; i++)
@@ -296,6 +317,7 @@ public:
 		for (int i = 0; i < actualPathLength; i++)
 			taskGraph.createEdge(taskGraph.vertices[taskGraph.Mod(i, actualPathLength)], taskGraph.vertices[taskGraph.Mod(i + 1, actualPathLength)]);
 	}
+#endif // ifdef _GRAPH_
 	void getToolLocation(int id, Matrix4 &TOOL)
 	{
 		TOOL.setColumn(0, path[id][1]); // tcp_x
@@ -309,54 +331,89 @@ public:
 		getToolLocation(id, _TOOL);
 		return _TOOL;
 	}
+	
+	//void changeTool(Matrix4 EE, Matrix4 &TOOL, int n)
+	//{
+	//	vec x = E_disp.XA;
+	//	vec y = E_disp.YA;
+	//	vec z = E_disp.ZA;
+	//	vec cen = E_disp.cen;
+
+	//	vec xf = E_disp.XA_f;
+	//	vec yf = E_disp.YA_f;
+	//	vec zf = E_disp.ZA_f;
+	//	vec cenf = E_disp.cen_f;
+
+
+	//	////  ------------------ ivnert to origin ;
+
+	//	Matrix3 trans = E_disp.rot;
+	//	trans.transpose();
+
+	//	x = trans * x; y = trans * y; z = trans * z;
+	//	xf = trans * xf; yf = trans * yf; zf = trans * zf;
+
+	//	Matrix4 T;
+	//	T.identity();
+	//	T.setColumn(3, cen);
+	//	T.invert();
+	//	cenf = T * cenf;
+	//	cen = T * cen;
+	//	cenf = cen + z.normalise() * 20.85; // strange addition 
+
+
+	//	// -------------- forward to tool location
+	//	trans.setColumn(0, EE.getColumn(0).normalise());
+	//	trans.setColumn(1, EE.getColumn(1).normalise());
+	//	trans.setColumn(2, EE.getColumn(2).normalise());
+
+	//	x = trans * x; y = trans * y; z = trans * z;
+	//	xf = trans * xf; yf = trans * yf; zf = trans * zf;
+
+	//	T.identity();
+	//	T.setColumn(3, EE.getColumn(3));
+	//	//cenf += EE.getColumn(3);
+	//	cen += EE.getColumn(3);
+	//	cenf = cen - z.normalise() * 20.85;
+
+	//	TOOL.setColumn(0, xf.normalise());
+	//	TOOL.setColumn(1, yf.normalise());
+	//	TOOL.setColumn(2, zf.normalise());
+	//	TOOL.setColumn(3, cenf);
+	//}
+
 	void changeTool(Matrix4 EE, Matrix4 &TOOL, int n)
 	{
-		vec x = E_disp.XA;
-		vec y = E_disp.YA;
-		vec z = E_disp.ZA;
-		vec cen = E_disp.cen;
+		Matrix4 Tooltip, J5;
 
-		vec xf = E_disp.XA_f;
-		vec yf = E_disp.YA_f;
-		vec zf = E_disp.ZA_f;
-		vec cenf = E_disp.cen_f;
+		Tooltip.setColumn(0, E_disp.XA);
+		Tooltip.setColumn(1, E_disp.YA);
+		Tooltip.setColumn(2, E_disp.ZA);
+		Tooltip.setColumn(3, E_disp.cen);
 
 
-		////  ------------------ inert to origin ;
+		J5.setColumn(0, E_disp.XA_f);
+		J5.setColumn(1, E_disp.YA_f);
+		J5.setColumn(2, E_disp.ZA_f);
+		J5.setColumn(3, E_disp.cen_f);
 
-		Matrix3 trans = E_disp.rot;
-		trans.transpose();
+		Matrix4 invertJ5andToolTip;
+		invertJ5andToolTip = Tooltip;
 
-		x = trans * x; y = trans * y; z = trans * z;
-		xf = trans * xf; yf = trans * yf; zf = trans * zf;
+		////
 
-		Matrix4 T;
-		T.identity();
-		T.setColumn(3, cen);
-		T.invert();
-		cenf = T * cenf;
-		cen = T * cen;
-		cenf = cen + z.normalise() * 20.85;
+		invertJ5andToolTip.invert();
 
+		transformFrame(invertJ5andToolTip, Tooltip);
+		transformFrame(invertJ5andToolTip, J5);
 
-		// -------------- forward to tool location
-		trans.setColumn(0, EE.getColumn(0).normalise());
-		trans.setColumn(1, EE.getColumn(1).normalise());
-		trans.setColumn(2, EE.getColumn(2).normalise());
+		//////////////////////////////////////////////////////////////////////////
 
-		x = trans * x; y = trans * y; z = trans * z;
-		xf = trans * xf; yf = trans * yf; zf = trans * zf;
+		transformFrame(EE, Tooltip);
+		transformFrame(EE, J5);
 
-		T.identity();
-		T.setColumn(3, EE.getColumn(3));
-		//cenf += EE.getColumn(3);
-		cen += EE.getColumn(3);
-		cenf = cen - z.normalise() * 20.85;
-
-		TOOL.setColumn(0, xf.normalise());
-		TOOL.setColumn(1, yf.normalise());
-		TOOL.setColumn(2, zf.normalise());
-		TOOL.setColumn(3, cenf);
+		TOOL = J5;
+		
 	}
 	void goToNextPoint()
 	{
@@ -398,7 +455,10 @@ public:
 	}
 
 	////////////////////////////////////////////////////////////////////////// COMPUTE METHODS
-
+	void updateForwardKinematics()
+	{
+		Nachi_tester.ForwardKineMatics(Nachi_tester.rot);
+	}
 	void checkReach()
 	{
 		getBoundingBox();
@@ -662,7 +722,7 @@ public:
 		// ------------------- draw Robot ;
 
 		if (wireFrame)wireFrameOn();
-			Nachi_tester.draw(false); // updates AO render points ;
+			Nachi_tester.draw(false); 
 		if (wireFrame)wireFrameOff();
 
 		if (showSphere) glutSolidSphere(78, 32, 32);
