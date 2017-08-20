@@ -1,5 +1,5 @@
 
-#define _MAIN_
+
 
 
 #ifdef _MAIN_
@@ -85,8 +85,6 @@ public:
 	}
 
 	///////// export methods
-
-
 };
 
 
@@ -94,20 +92,20 @@ public:
 ///////////////////////////////////////////////////////////// MAIN PROGRAM /////////////////////////////////////////////////////////////
 
 
-circle allCircles[5];
+circle allCircles[4];
+int numOfCircles = 4;
 
-
+//API application programming interface
 
 void setup()
 {
 
-
-
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < numOfCircles; i++)
 	{
-		allCircles[i].cen = vec(5 * i, 0, 0);
+		allCircles[i].cen = vec( ofRandom(-10,10), ofRandom(-10, 10),0);// vec(5 * i, 0, 0);
 		allCircles[i].initialisePoints();
 	}
+
 
 }
 
@@ -115,14 +113,14 @@ void setup()
 void update(int value)
 {
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < numOfCircles; i++)
 	{
 		allCircles[i].reset();
 	}
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < numOfCircles; i++)
 	{
-		for (int j = 0; j < 5; j++)
+		for (int j = 0; j < numOfCircles; j++)
 		{
 			if (i == j)continue;
 
@@ -130,7 +128,7 @@ void update(int value)
 		}
 	}
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < numOfCircles; i++)
 	{
 		allCircles[i].expand();
 	}
@@ -148,8 +146,9 @@ void draw()
 	drawGrid(20);
 
 	glPointSize(5);
-	for (int i = 0; i < 5; i++)allCircles[i].display();
+	for (int i = 0; i < numOfCircles; i++)allCircles[i].display();
 	glPointSize(1);
+
 
 }
 
@@ -160,6 +159,7 @@ void mousePress(int b, int state, int x, int y)
 
 void mouseMotion(int x, int y)
 {
+
 }
 
 void keyPress(unsigned char k, int xm, int ym)
