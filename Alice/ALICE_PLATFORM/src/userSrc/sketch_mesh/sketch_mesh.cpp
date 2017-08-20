@@ -73,9 +73,7 @@ void keyPress(unsigned char k, int xm, int ym)
 
 	if (k == 'q') // create a quad
 	{
-		M.n_v = 0;
-		M.n_f = 0;
-		M.n_e = 0; 
+		M = *new Mesh();
 		// add vertices to M;
 		float radius = 3.0;
 		for (int i = 0; i < 4; i++)
@@ -127,7 +125,7 @@ void keyPress(unsigned char k, int xm, int ym)
 		}
 
 		// assign face normals.. this is a temporary fix in current repository. This won't be needed in the future.
-		//for (int i = 0; i < M.n_f; i++)M.faces[i].faceVertices();
+		for (int i = 0; i < M.n_f; i++)M.faces[i].faceVertices();
 
 	}
 
