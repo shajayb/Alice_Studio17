@@ -1,5 +1,3 @@
-
-
 #define  _MAIN_
 
 #ifdef _MAIN_
@@ -24,7 +22,7 @@ float inc = 0.005;
 
 void setup()
 {
-	
+
 }
 
 void update(int value)
@@ -39,11 +37,11 @@ void draw()
 {
 
 
-	backGround(0.75) ;
-	drawGrid(20) ;
+	backGround(0.75);
+	drawGrid(20);
 
-	glPointSize(1) ;
-	
+	glPointSize(1);
+
 	// update rule for a circle
 	vec tangent;
 	tangent.x = (A.y) * 0.01;
@@ -52,22 +50,17 @@ void draw()
 	tangent.y = ofRandom(-0.1, 0.1);*/
 
 	vec Anew = A + tangent;
-	A = Anew ;
+	A = Anew;
 
 	int numberofPts = A_pts.size();
 	int remainder = numberofPts % 10;
 
-	if( remainder == 0 ) // every 1000 points
+	if (remainder == 0) // every 1000 points
 	{
 		inc = inc * -1;
 		//A = A * (1.0 + inc); // 1.0005 --> 1.0 + 0.0005
 	}
-	else
-	{
-		//A = A * (1.0 - inc); // 0.9995 --> 1.0 - 0.0005
-	}
 
-	
 	A = A * (1.0 + inc);
 
 	drawPoint(A);
@@ -77,7 +70,7 @@ void draw()
 	// --> find the tangent of the curve  
 
 	// draw all the points in A_pts ;
-	for( auto pt : A_pts )
+	for (auto pt : A_pts)
 	{
 		drawPoint(pt);
 	}
