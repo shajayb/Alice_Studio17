@@ -1,6 +1,4 @@
-
-
-#define  _MAIN_
+#define _MAIN_
 
 #ifdef _MAIN_
 
@@ -18,9 +16,6 @@ using namespace std::experimental;
 
 ///////// ----------------------------------------- model - view - controller (MVC) paradigm / pattern / template  ----------------- ////////////////////////////// 
 /////////////////////////// model  ///////////////////////////////////////////
-vec A(5, 0, 0);
-list<vec> A_pts;
-float inc = 0.005;
 
 void setup()
 {
@@ -42,45 +37,27 @@ void draw()
 	backGround(0.75) ;
 	drawGrid(20) ;
 
-	glPointSize(1) ;
-	
-	// update rule for a circle
-	vec tangent;
-	tangent.x = (A.y) * 0.01;
-	tangent.y = (A.x) * -0.01;
-	/*tangent.x = ofRandom(-0.1, 0.1);
-	tangent.y = ofRandom(-0.1, 0.1);*/
+	glPointSize(5) ;
 
-	vec Anew = A + tangent;
-	A = Anew ;
+	float R = 10 ;
 
-	int numberofPts = A_pts.size();
-	int remainder = numberofPts % 10;
-
-	if( remainder == 0 ) // every 1000 points
+	// for( initial value ; till value ; increment)
+	// for loop
+	for( float parameter = 0.0 ; parameter < 2.0 ; parameter += 0.1 )
 	{
-		inc = inc * -1;
-		//A = A * (1.0 + inc); // 1.0005 --> 1.0 + 0.0005
-	}
-	else
-	{
-		//A = A * (1.0 - inc); // 0.9995 --> 1.0 - 0.0005
+		float x = R * cos(PI * parameter);
+		float y = R * sin(PI * parameter);
+
+		x += 10;
+		y += 10; 
+
+		drawPoint(vec(x, y, 0));
 	}
 
 	
-	A = A * (1.0 + inc);
 
-	drawPoint(A);
-
-	A_pts.push_back(A);
-	// principle of differential curves
-	// --> find the tangent of the curve  
-
-	// draw all the points in A_pts ;
-	for( auto pt : A_pts )
-	{
-		drawPoint(pt);
-	}
+	
+	
 }
 
 /////////////////////////// control  ///////////////////////////////////////////
@@ -94,11 +71,6 @@ void mouseMotion(int x, int y)
 
 void keyPress(unsigned char k, int xm, int ym)
 {
-
-
-
-	// update rule for some other curve
-
 
 }
 

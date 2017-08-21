@@ -1,2 +1,2 @@
-#TargetFrameworkVersion=v4.0:PlatformToolSet=v141_xp:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=7.0
-Release|x64|C:\Users\shajay.b\Source\Repos\Alice_Studio17\Alice\ALICE_PLATFORM\|
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
+Release|x64|C:\Users\bshajay\Source\Repos\Alice_Studio17\Alice\ALICE_PLATFORM\|
