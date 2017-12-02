@@ -2,5 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="src\userSrc\sketch_helloWorld\sketch_helloWorld.cpp" />
+    <ClCompile Include="src\userSrc\sketch_empty.cpp" />
   </ItemGroup>
 </Project>

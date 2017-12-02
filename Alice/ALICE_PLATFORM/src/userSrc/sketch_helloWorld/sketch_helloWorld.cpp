@@ -11,7 +11,7 @@
 #include<time.h>
 #include<experimental/generator> 
 
-using namespace std;
+using namespace std; 
 using namespace std::experimental;
 #include "sketch_spatialBinning\spatialBin.h"
 
